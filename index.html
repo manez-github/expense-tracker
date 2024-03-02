@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense</title>
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous"
+	/>
+    <script
+			defer
+			src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+			integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+			crossorigin="anonymous"
+	></script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">EXpense Tracker</span>
+        <span class="navbar-brand mb-0 h1" id = "heading-shows-total-Expense">Total:</span>
+    </nav>
+
+    
+
+    <!-- Jumbotron -->
+    <div class="container-fluid bg-light" style="min-height: 100vh">
+        <div class="container"> 
+
+            <!-- <h1 id = "heading-shows-total-Expense">Total:</h1>     -->
+            <div class="jumbotron mt-4">
+
+                <!-- Description -->
+                <label>Expense Description: </label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="spent at">@</span>
+                    </div>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id = "input-description"
+                        placeholder="Laptop SSD"
+                        aria-label="Laptop SSD"
+                        aria-describedby="Laptop SSD"
+                    />
+                </div>
+
+                <!-- Amount -->
+                <label>Expense Amount: </label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">₹</span>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id = "input-amount"
+                        placeholder="20000"
+                        aria-label="20000"
+                        aria-describedby="20000"
+                        />
+                </div>
+
+                <!-- <label>Expense Amount: </label>
+                <div class="input-group mb-3">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id = "input-amount" 
+                        placeholder="eg. 50000"
+                        aria-label="eg. 50000"
+                        aria-describedby="spent in rupee"
+                    />
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="spent in rupee">₹</span>
+                    </div>
+                </div> -->
+
+                <!-- Submit Button -->
+                <div class="input-group-append d-flex justify-content-center">
+                        <button class="btn btn-outline-primary" type="button" id="btn-add-expense">Add</button>
+                </div>
+
+            </div>
+            
+            <!-- <input id = "input-description" type = "text">
+            <input id = "input-amount" type = "text"> 
+            <button id = "btn-add-expense">+</button> -->
+            <div id = "bootstrap-display"></div>
+            <!-- <div id = "table-displays-all-expenses"></div> -->
+        </div>
+    </div>
+        
+    <!-- JAVASCRIPT STARTS HERE -->
+    <script>
+
+        // List which will diplay the expenses one by one 
+        const tableEl = document.querySelector("#bootstrap-display");
+
+        // Description of the input
+        const inputDescriptionEl = document.querySelector("#input-description");
+
+        // Amount
+        const inputAmountEl = document.querySelector("#input-amount");
+
+        // Button that adds expeneses
+        const buttonEl = document.querySelector("#btn-add-expense");
+
+        // Displays total expense
+        const headingEl = document.querySelector("#heading-shows-total-Expense");
+
+        // Array => Objects => {Description: , Amount: }
+        const allExpenses = [];
+
+        let totalExpense = 0;
+
+        function giveTotalExpense(){
+
+            console.clear();
+            // Get the value of input description 
+            let description = inputDescriptionEl.value;
+            console.log({ description });
+
+            // Get the value of input amount 
+            let amount = inputAmountEl.value;
+            console.log({ amount });
+
+            // Convert amount from text to integer
+            const expense = parseInt(amount ,10);
+            console.log({ expense });
+
+            // This is another way of dealing with the date thing where we do not make a 
+            // seperate function for giving us date and time 
+            // let moment1 = new Date(); 
+            // let options = {};
+            // options.weekday = "long";
+            // options.year = "numeric";
+            // options.month = "long";
+            // options.day = "numeric";
+            // const currentDateAndTime = moment1.toLocaleDateString("en-US", options);
+            
+            
+            
+            // create an object in which every time the user will enter amonunt and description in 
+            // the website the website will store these two things as an object
+            const detailsOfCurrentExpense = {};
+            detailsOfCurrentExpense.expenseDescription = description;
+            detailsOfCurrentExpense.expenseAmount = expense;
+            detailsOfCurrentExpense.moment = new Date();
+            //detailsOfCurrentExpense.currentDate = currentDateAndTime;
+
+            // Push this newly created object into the array 
+            allExpenses.push(detailsOfCurrentExpense);
+            console.table(allExpenses);
+
+            totalExpense = totalExpense + expense;
+            console.log({ totalExpense });
+
+            // Unpack the array
+
+            /*
+            const obj1 = allExpenses[0];
+            const obj2 = allExpenses[1];
+            */
+
+            // Acces the values of the objects
+            /*
+            const valuesInsideObj1 = `Description: ${obj1.expenseDescription} :: Amount: ${obj1.expenseAmount}`;
+            const valuesInsideObj2 = `Description: ${obj2.expenseDescription} :: Amount: ${obj2.expenseAmount}`;
+
+            const table = `
+                <div>${valuesInsideObj1}</div>;
+                <div>${valuesInsideObj2}</div>;
+            `;
+            */
+
+            displayArrayOnDocument(allExpenses);
+          
+            // const allExpensesHTML = allExpenses.map((value) => {
+            //     return keepHTMLhere(value);
+            // });
+
+            // console.log(allExpensesHTML);
+            // //const allExpensesJoined = allExpenses.join("")
+
+            // const joinedAllExpensesHTML = allExpensesHTML.join("");
+            // console.log(joinedAllExpensesHTML);
+
+            // // We want to diplay the values of objects that we unpacked in the document/ website.
+            // // For printing output in text format: tableEl.textContent = valuesInsideObj1 + valuesInsideObj2;
+            
+            // // For printion output in table format
+            // tableEl.innerHTML = joinedAllExpensesHTML;
+
+            // Set the heading element to total expense : headingEl.textContent = totalExpense;
+            const textWhichGetsDisplayed = `Total: ${totalExpense}`; 
+            headingEl.textContent = textWhichGetsDisplayed;
+
+        }
+
+        buttonEl.addEventListener("click", giveTotalExpense, false);
+
+        function givesCurrentDate(moment){
+            let options = {};
+            options.weekday = "long";
+            options.year = "numeric";
+            options.month = "long";
+            options.day = "numeric";
+
+            return moment.toLocaleDateString("en-US", options);
+        }
+
+        function deleteItem(dateValue){
+            console.log(`function deleteItem was called.
+            This is the output of the function moment.valueOF(): ${dateValue}.`);
+            
+            for(let i = 0; i< allExpenses.length; i++){
+                if(allExpenses[i].moment.valueOf() === dateValue){
+                    console.log("Item Found!!!", allExpenses[i]);
+                    allExpenses.splice(i , 1);
+                }
+            }
+
+
+            displayArrayOnDocument(allExpenses);
+        }
+
+        function displayArrayOnDocument(allExpenses){
+
+            const allExpensesHTML = allExpenses.map((value) => {
+                return keepHTMLhere(value);
+            });
+            console.log(allExpensesHTML);
+
+            const joinedAllExpensesHTML = allExpensesHTML.join("");
+            console.log(joinedAllExpensesHTML);
+
+            tableEl.innerHTML = joinedAllExpensesHTML;
+
+        }
+
+        function keepHTMLhere({expenseDescription, expenseAmount, moment}){
+                return `
+                        <div>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <div class="d-flex flex-column">
+                                        ${expenseDescription}
+                                        <small class="text-muted">${givesCurrentDate(moment)}</small>
+                                    </div>
+                                    <div>
+                                        <span class="px-5">
+                                            ${expenseAmount}
+                                        </span>
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-outline-danger btn-sm"
+                                            onclick = "deleteItem(${moment.valueOf()})";
+                                            >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        <div/>
+						`;
+        };
+
+
+    </script>
+</body>
+</html>
